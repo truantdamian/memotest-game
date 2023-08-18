@@ -9,7 +9,7 @@ type propsTypes = {
 };
 
 export const Card = ({ url, title }: propsTypes) => {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   const handleClick = () => {
     setShow(!show);
@@ -18,7 +18,7 @@ export const Card = ({ url, title }: propsTypes) => {
   return (
     <div>
       <div
-        className={`h-52 w-44 border rounded-md shadow-md cursor-pointer relative duration-700 preserve-3d  ${
+        className={`h-32 w-28 xs:h-36 xs:w-32 md:h-44 md:w-40 border rounded-md shadow-md cursor-pointer relative duration-700 preserve-3d  ${
           show ? "rotate-y-180" : ""
         }`}
         onClick={handleClick}
@@ -26,17 +26,14 @@ export const Card = ({ url, title }: propsTypes) => {
         <div className="w-full h-full rounded-md  backface-hidden absolute p-2">
           <div className="w-full h-full bg-[url('/images/back-card.svg')] rounded-sm"></div>
         </div>
-        <div className="w-full h-full rounded-md  backface-hidden absolute rotate-y-180 p-2 flex flex-col justify-center">
-          <figure className="flex flex-col items-center justify-center">
-            <Image
-              src={url}
-              alt={title}
-              height={140}
-              width={140}
-              className="max-h-[140px]"
-            />
-            <figcaption className="uppercase py-2">{title}</figcaption>
-          </figure>
+        <div className="w-full h-full rounded-md  backface-hidden absolute rotate-y-180 p-2">
+          <Image
+            src={url}
+            alt={title}
+            fill
+            className="p-2"
+            objectFit="contain"
+          />
         </div>
       </div>
     </div>

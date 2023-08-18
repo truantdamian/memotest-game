@@ -1,4 +1,5 @@
 const plugin = require("tailwindcss/plugin");
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 const backfaceVisibility = plugin(function ({ addUtilities }) {
   addUtilities({
@@ -35,7 +36,12 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        xs: "475px",
+        ...defaultTheme.screens,
+      },
+    },
   },
   plugins: [backfaceVisibility, rotateY, transformStyle],
 };
