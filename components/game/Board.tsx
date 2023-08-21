@@ -19,15 +19,19 @@ export const Board = () => {
         </div>
       )}
       {status === statusGameEnum.started && (
-        <div className="flex flex-col md:grid md:grid-cols-[auto_1fr] gap-2">
+        <div className="flex flex-col lg:flex lg:flex-row gap-2">
           <div className="p-6">
             <div className="mb-2">
               <UserInfo />
             </div>
-            <GameInfo />
+            <div>
+              <GameInfo />
+            </div>
           </div>
-          <div className="border p-6 h-full">
-            <CardList />
+          <div className="border p-6 h-full w-full">
+            <div className="flex flex-col items-center justify-center">
+              <CardList />
+            </div>
           </div>
         </div>
       )}

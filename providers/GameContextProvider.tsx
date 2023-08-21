@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 
 import { gameModeEnum } from "enum/gameModeEnum";
 import { duplicate, shuffle } from "utils/arrayUtils";
@@ -11,6 +11,7 @@ import { statusGameEnum } from "enum/statusGameEnum";
 export type gameContextType = {
   game: gameType;
   user: userType;
+  items: itemType[];
   loadingItems: boolean;
   newGame: () => void;
   addStatistics: (item1: itemType, item2: itemType) => void;
@@ -23,6 +24,9 @@ export const GameContext = createContext<gameContextType>(null);
 
 export const GameContextProvider = ({ children }) => {
   const [loadingItems, setLoadingItems] = useState(false);
+  const [itemsApi, setItemsApi] = useState([]);
+
+  const [items, setItems] = useState<itemType[]>([]);
 
   const [user, setUser] = useState<userType>({
     name: "",
@@ -31,7 +35,6 @@ export const GameContextProvider = ({ children }) => {
   const [game, setGame] = useState<gameType>({
     status: statusGameEnum.init,
     mode: gameModeEnum.easy,
-    items: [],
     statistics: {
       cards: [],
       hits: 0,
@@ -51,23 +54,28 @@ export const GameContextProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (!game.mode) {
-      return;
-    }
-
     const loadItems = async () => {
       setLoadingItems(true);
-      const itemsApi = await getItems(game.mode);
-      const items = shuffle(duplicate(itemsApi));
+      const result = await getItems(gameModeEnum.hard);
+      setItemsApi(result);
       setLoadingItems(false);
-      setGame({
-        ...game,
-        items,
-      });
     };
 
     loadItems();
-  }, [game.mode]);
+  }, []);
+
+  const memoizedItems = useMemo(() => {
+    return itemsApi;
+  }, [itemsApi]);
+
+  useEffect(() => {
+    if (memoizedItems.length === 0) {
+      return;
+    }
+
+    const items = prepareItems(game.mode);
+    setItems(items);
+  }, [game.mode, memoizedItems]);
 
   const addStatistics = (item1: itemType, item2: itemType) => {
     let hits = game.statistics.hits;
@@ -142,6 +150,14 @@ export const GameContextProvider = ({ children }) => {
     }
   };
 
+  const prepareItems = (mode: gameModeEnum) => {
+    const result = memoizedItems.slice(0, getItemNumberByMode(mode));
+
+    const items = shuffle(duplicate(result));
+
+    return items;
+  };
+
   const getItems = async (mode: gameModeEnum) => {
     const result = await fetch(
       `/api/animals?per_page=${getItemNumberByMode(mode)}`
@@ -157,6 +173,7 @@ export const GameContextProvider = ({ children }) => {
       value={{
         game,
         user,
+        items,
         loadingItems,
         newGame,
         finishGame,

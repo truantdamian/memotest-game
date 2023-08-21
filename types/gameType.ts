@@ -6,6 +6,5 @@ import { statusGameEnum } from "enum/statusGameEnum";
 export type gameType = {
   status: statusGameEnum;
   mode: gameModeEnum;
-  items: itemType[];
   statistics: statisticsType;
 };

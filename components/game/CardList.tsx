@@ -3,11 +3,13 @@ import { useContext, useEffect, useState } from "react";
 import { Card } from "./Card";
 import { GameContext, gameContextType } from "providers/GameContextProvider";
 import { itemType } from "types/itemType";
+import { Loading } from "components/icons/Loading";
+import { gameModeEnum } from "enum/gameModeEnum";
 
 export const CardList = () => {
-  const { game, addStatistics, finishGame, loadingItems } =
+  const { game, items, addStatistics, finishGame, loadingItems } =
     useContext<gameContextType>(GameContext);
-  const { items, statistics } = game;
+  const { statistics } = game;
 
   const [flippedCards, setFlippedCard] = useState([]);
 
@@ -56,21 +58,38 @@ export const CardList = () => {
     );
   };
 
+  const getGridCol = () => {
+    switch (game.mode) {
+      case gameModeEnum.easy:
+        return "grid-cols-2 md:grid-cols-4 lg:grid-cols-4";
+      case gameModeEnum.normal:
+        return "grid-cols-2 md:grid-cols-4 lg:grid-cols-4";
+      case gameModeEnum.hard:
+        return "grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6";
+    }
+  };
+
   return (
-    <div
-      className={`flex flex-row flex-wrap items-center justify-center gap-2`}
-    >
-      {loadingItems && <div>LOADING...</div>}
-      {!loadingItems &&
-        items.map((item: itemType) => (
-          <Card
-            key={item.id}
-            url={item.url}
-            title={item.title}
-            show={canShow(item)}
-            handleClick={() => handleClick(item)}
-          />
-        ))}
-    </div>
+    <>
+      {loadingItems && (
+        <div className="flex flex-row items-center justify-center">
+          LOADING...
+          <Loading />
+        </div>
+      )}
+
+      <div className={`grid ${getGridCol()} gap-4`}>
+        {!loadingItems &&
+          items.map((item: itemType) => (
+            <Card
+              key={item.id}
+              url={item.url}
+              title={item.title}
+              show={canShow(item)}
+              handleClick={() => handleClick(item)}
+            />
+          ))}
+      </div>
+    </>
   );
 };

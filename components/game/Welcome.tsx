@@ -10,6 +10,7 @@ export const Welcome = () => {
   const { game, user, addMode, newGame, addUser } =
     useContext<gameContextType>(GameContext);
   const [name, setName] = useState("");
+  const [changeName, setChangeName] = useState(false);
   const [error, setError] = useState({ name: "" });
   const [step, setStep] = useState(0);
 
@@ -64,6 +65,11 @@ export const Welcome = () => {
     return true;
   };
 
+  const handleRequestChangeName = () => {
+    setName("");
+    setChangeName(true);
+  };
+
   const handleChangeName = ({ target }) => {
     setName(target.value);
   };
@@ -95,7 +101,7 @@ export const Welcome = () => {
   return (
     <div className="flex flex-col items-center gap-4  justify-center pt-6">
       <div className="border p-6 flex flex-col gap-5 max-w-3xl">
-        <div className="flex flex-row gap-4">
+        <div className="flex-row gap-4 hidden md:flex">
           <Card show={memoCardSteps[step].card1}>
             <div className="h-full flex flex-col border p-2">
               <div className="text-3xl font-bold flex-1">M</div>
@@ -129,18 +135,24 @@ export const Welcome = () => {
             </div>
           </Card>
         </div>
-        {user.name !== "" && (
+        {user.name !== "" && !changeName && (
           <div className="mt-8">
             <h3 className="text-3xl font-bold w-full text-center">
               👋 Welcome back{" "}
-              <span className="text-slate-500">{user.name}</span>!
+              <span className="text-slate-500">{user.name}</span>
+              <span
+                className="text-blue-400 cursor-pointer text-xs ml-1"
+                onClick={handleRequestChangeName}
+              >
+                (I'm not me)
+              </span>
             </h3>
           </div>
         )}
-        {user.name === "" && (
+        {(user.name === "" || changeName) && (
           <div>
             <TextField
-              placeholder="put your name"
+              placeholder="put your name and start game"
               value={name}
               onChange={handleChangeName}
               maxLength={20}
