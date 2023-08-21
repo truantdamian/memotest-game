@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "paths": {
-      "components/*": ["./components/*"]
+      "components/*": ["./components/*"],
+      "providers/*": ["./providers/*"],
+      "types/*": ["./types/*"],
+      "utils/*": ["./utils/*"],
+      "enum/*": ["./enum/*"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

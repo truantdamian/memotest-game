@@ -1,9 +1,5 @@
-import { Board } from "components/Board";
+import { ContainerGame } from "components/game/ContainerGame";
 
 export default function Page() {
-  return (
-    <div className="flex justify-center h-full">
-      <Board />
-    </div>
-  );
+  return <ContainerGame />;
 }

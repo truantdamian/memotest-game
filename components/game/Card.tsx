@@ -1,20 +1,21 @@
-"use client";
-
 import Image from "next/image";
-import { useState } from "react";
+import React from "react";
 
 type propsTypes = {
-  url: string;
-  title: string;
+  children?: React.ReactNode;
+  url?: string;
+  title?: string;
+  show?: boolean;
+  handleClick?: () => void;
 };
 
-export const Card = ({ url, title }: propsTypes) => {
-  const [show, setShow] = useState(false);
-
-  const handleClick = () => {
-    setShow(!show);
-  };
-
+export const Card = ({
+  children,
+  url,
+  title,
+  show = false,
+  handleClick = () => {},
+}: propsTypes) => {
   return (
     <div>
       <div
@@ -27,13 +28,16 @@ export const Card = ({ url, title }: propsTypes) => {
           <div className="w-full h-full bg-[url('/images/back-card.svg')] rounded-sm"></div>
         </div>
         <div className="w-full h-full rounded-md  backface-hidden absolute rotate-y-180 p-2">
-          <Image
-            src={url}
-            alt={title}
-            fill
-            className="p-2"
-            objectFit="contain"
-          />
+          {url && (
+            <Image
+              src={url}
+              alt={title}
+              fill
+              className="p-2"
+              objectFit="contain"
+            />
+          )}
+          {children}
         </div>
       </div>
     </div>
