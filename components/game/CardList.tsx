@@ -36,6 +36,10 @@ export const CardList = () => {
   }, [flippedCards]);
 
   useEffect(() => {
+    setFlippedCard([]);
+  }, [game.mode]);
+
+  useEffect(() => {
     let timeout = null;
 
     if (statistics.hits === 0) {
