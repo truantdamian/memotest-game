@@ -75,7 +75,7 @@ export const GameContextProvider = ({ children }) => {
 
     const items = prepareItems(game.mode);
     setItems(items);
-  }, [game.mode, memoizedItems]);
+  }, [game.mode, memoizedItems, game.status]);
 
   const addStatistics = (item1: itemType, item2: itemType) => {
     let hits = game.statistics.hits;
